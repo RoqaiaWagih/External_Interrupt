@@ -39,6 +39,7 @@ To enable an external interrupt, follow these steps:
 
 ## Driver Overview
 
+
 ### Files
 
 - **Header Files:**
@@ -90,6 +91,10 @@ To enable an external interrupt, follow these steps:
     void __vector_1(void) __attribute__((signal));
     void __vector_1(void) {
         // Your code here
+         if(PRV_pFunCallBackINT0!=NULL)
+	      {
+	     	PRV_pFunCallBackINT0();
+	      }
     }
     ```
 
@@ -100,6 +105,10 @@ To enable an external interrupt, follow these steps:
     void __vector_2(void) __attribute__((signal));
     void __vector_2(void) {
         // Your code here
+        if(PRV_pFunCallBackINT1!=NULL)
+	      {
+	     	PRV_pFunCallBackINT1();
+	      }
     }
     ```
 
@@ -109,10 +118,25 @@ To enable an external interrupt, follow these steps:
     ```c
     void __vector_3(void) __attribute__((signal));
     void __vector_3(void) {
-        // Your code here
+        if(PRV_pFunCallBackINT2!=NULL)
+	      {
+	     	PRV_pFunCallBackINT2();
+	      }
     }
     ```
-
+    ### Functions of  global interrupt(GI)
+- **Description:**    Enables/Disables external interrupts INT0, INT1, and INT2 in `GICR (General Interrupt Control Register)`:
+   - **Parameters:**
+     -` void `
+   - **Usage Example:**
+  ```c
+    void GI_voidEnable(void){
+	       SET_BIT(SREG_REG,I);
+    }
+   void GI_voidDisable(void){
+	       CLR_BIT(SREG_REG,I);
+    }
+  ```
 ## Example Usage
 
 Here's a simple example demonstrating how to use the external interrupt module:
