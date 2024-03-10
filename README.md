@@ -11,7 +11,8 @@ External interrupts play a crucial role in microcontroller applications by allow
 - [Interrupt Registers](#interrupt-registers)
 - [Configuring External Interrupts](#configuring-external-interrupts)
 - [Interrupt Service Routines (ISRs)](#interrupt-service-routines-isrs)
-- [Example Code](#example-code)
+- [Driver Overview](#driver-overview)
+- [Data Sheet](data-sheet)
 - [Conclusion](#conclusion)
 
 ## External Interrupt Pins
@@ -34,49 +35,117 @@ To enable an external interrupt, follow these steps:
 1. Configure the sense control for the corresponding interrupt pin using MCUCR and MCUCSR.
 2. Enable the global interrupt flag by setting the I-bit in SREG.
 3. Enable the specific external interrupt by setting the corresponding bit in GICR.
-# My PDF Document
 
-<iframe src="your_file.pdf" width="800" height="600"></iframe>
 
+## Driver Overview
+
+### Files
+
+- **Header Files:**
+  - `BIT_MATH.h`: A library providing bit manipulation macros.
+  - `STD_TYPES.h`: A library containing standard data types.
+  - `EXTI_Interrupt_interface.h`: Interface file for external interrupt functions.
+  - `EXTI_Interrupt_register.h`: Register definitions for external interrupt configuration.
+
+### Functions
+
+1. **`EXTU_voidEnable`:**
+   - **Description:** Enables external interrupts based on the specified interrupt source and sense control.
+   - **Parameters:**
+     - `copy_enumInterruptSource`: The chosen external interrupt source (INT0, INT1, INT2).
+     - `copy_enumSenseControl`: The desired sense control (rising edge, falling edge, low level, any logical change).
+   - **Usage Example:**
+     ```c
+     EXTU_voidEnable(EXTI_INT0, EXTI_RISING_EDGE);
+     ```
+
+2. **`EXTU_voidDisable`:**
+   - **Description:** Disables the specified external interrupt source.
+   - **Parameters:**
+     - `copy_enumInterruptSource`: The chosen external interrupt source (INT0, INT1, INT2).
+   - **Usage Example:**
+     ```c
+     EXTU_voidDisable(EXTI_INT1);
+     ```
+
+3. **`EXTI_voidSetCallBackINT0`, `EXTI_voidSetCallBackINT1`, `EXTI_voidSetCallBackINT2`:**
+   - **Description:** Sets callback functions for the corresponding external interrupt sources.
+   - **Parameters:**
+     - `copy_pFunAction`: Pointer to the callback function.
+   - **Usage Example:**
+     ```c
+     void myCallbackFunction(void) {
+         // Your code here
+     }
+
+     EXTI_voidSetCallBackINT0(myCallbackFunction);
+     ```
 
 ## Interrupt Service Routines (ISRs)
 
-- **ISR(INT0_vect):** Interrupt Service Routine for INT0.
-- **ISR(INT1_vect):** Interrupt Service Routine for INT1.
-- **ISR(INT2_vect):** Interrupt Service Routine for INT2.
+- **ISR(INT0_vect):**
+  - **Description:** Interrupt Service Routine for external interrupt INT0.
+  - **Usage Example:**
+    ```c
+    void __vector_1(void) __attribute__((signal));
+    void __vector_1(void) {
+        // Your code here
+    }
+    ```
 
-## Example Code
+- **ISR(INT1_vect):**
+  - **Description:** Interrupt Service Routine for external interrupt INT1.
+  - **Usage Example:**
+    ```c
+    void __vector_2(void) __attribute__((signal));
+    void __vector_2(void) {
+        // Your code here
+    }
+    ```
 
-Here's a simple example demonstrating how to configure and use external interrupts:
+- **ISR(INT2_vect):**
+  - **Description:** Interrupt Service Routine for external interrupt INT2.
+  - **Usage Example:**
+    ```c
+    void __vector_3(void) __attribute__((signal));
+    void __vector_3(void) {
+        // Your code here
+    }
+    ```
+
+## Example Usage
+
+Here's a simple example demonstrating how to use the external interrupt module:
 
 ```c
 #include "EXTI_Interrupt_interface.h"
-#include "GI_interface.h"
-#include "DIO_Interface.h"
 
-void fun(void);
-int main(void)
-{
-    /* Replace with your application code */
-		DIO_voidSetPinDirection(DIO_PORTD,DIO_PIN3,DIO_PIN_INPUT);
-		DIO_voidSetPinDirection(DIO_PORTA,DIO_PIN4,DIO_PIN_OUTPUT);
-		
-		GI_voidEnable();
-		EXTI_voidSetCallBackINT1(&fun);
-		EXTU_voidEnable(EXTI_INT1,EXTI_FALLING_EDGE);
-    while (1) 
-    {
-
-}
+void myCallbackFunction(void) {
+    // Your code here
 }
 
+int main(void) {
+    // Configure external interrupts and other necessary settings
 
-void fun(void)
-{
-	
-	DIO_voidTogglePinValue(DIO_PORTA,DIO_PIN4);
+    // Set callback functions
+    EXTI_voidSetCallBackINT0(myCallbackFunction);
+    EXTI_voidSetCallBackINT1(myCallbackFunction);
+    EXTI_voidSetCallBackINT2(myCallbackFunction);
+
+    // Main application code
+
+    while (1) {
+        // Your main loop code
+    }
+
+    return 0;
 }
 ```
+## Data Sheet
+
+[extirnal interrupt](https://github.com/RoqaiaWagih/External_Interrupt/blob/main/interrupt.pdf)
+
+
 
 ## Conclusion
 
