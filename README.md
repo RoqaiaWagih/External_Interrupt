@@ -124,8 +124,8 @@ To enable an external interrupt, follow these steps:
 	      }
     }
     ```
-    ### Functions of  global interrupt(GI)
-- **Description:**    Enables/Disables external interrupts INT0, INT1, and INT2 in `GICR (General Interrupt Control Register)`:
+## Functions of  global interrupt(GI)
+- **Description:**    Enables/Disables the global interrupt flag by setting the I-bit in `SREG`.
    - **Parameters:**
      -` void `
    - **Usage Example:**
